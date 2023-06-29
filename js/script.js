@@ -99,8 +99,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	//new modal
 	const modalTriggers = document.querySelectorAll('[data-modal]'),
-	      modal = document.querySelector('.modal'),
-	      modalClose = document.querySelector('[data-close]');
+		modal = document.querySelector('.modal'),
+		modalClose = document.querySelector('[data-close]');
 	function showModal() {
 		modal.classList.add('show');
 		modal.classList.remove('hide');
@@ -111,22 +111,52 @@ window.addEventListener('DOMContentLoaded', () => {
 		modal.classList.remove('show');
 		document.body.style.overflow = '';
 	}
-
 	modalTriggers.forEach(btn => {
 		btn.addEventListener('click', showModal);
 	});
 	modalClose.addEventListener('click', hideModal);
-
 	modal.addEventListener('click', (e) => {
 		if (e.target === modal) {
 			hideModal();
 		}
 	});
-
 	document.addEventListener('keydown', (e) => {
 		if (e.code === 'Escape') {
 			hideModal();
 		}
 	});
+
+	//slides
+	const slides = document.querySelectorAll('.offer__slide'),
+	      prev = document.querySelector('.offer__slider-prev'),
+	      next = document.querySelector('.offer__slider-next'),
+	      total = document.querySelector('#total'),
+	      current = document.querySelector('#current');
+
+	let slideIndex = 1;
+	showSlides(slideIndex);
+
+	total.textContent = slides.length < 10 ? `0${slides.length}` : slides.length;
+
+	function showSlides(n) {
+		slideIndex = n > slides.length ? 1 : n < 1 ? slides.length : n;
+
+		slides.forEach(item => {
+			item.classList.remove('show');
+			item.classList.add('hide');
+		});
+
+		slides[slideIndex - 1].classList.add('show');
+		slides[slideIndex - 1].classList.remove('hide');
+
+		current.textContent = slides.length < 10 ? `0${slides.length}` : slideIndex;
+	}
+
+	function plusSlides(n) {
+		showSlides(slideIndex += n);
+	}
+
+	prev.addEventListener('click', () => plusSlides(-1));
+	next.addEventListener('click', () => plusSlides(1));
 });
 
